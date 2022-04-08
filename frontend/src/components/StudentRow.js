@@ -1,8 +1,13 @@
 import React from "react";
 
-function StudentRow({ name, surname, birthday, program, group, city, _id }) {
+function StudentRow({ id, setIsEditing, student, setEditableData }) {
+  function editStudent(student) {
+    setEditableData(student);
+    setIsEditing(true);
+  }
   const handleClick = () => {
-    fetch(`/api/v1/students/${_id}`, {
+    console.log(id);
+    fetch(`http://localhost:4000/api/v1/students/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -12,14 +17,21 @@ function StudentRow({ name, surname, birthday, program, group, city, _id }) {
 
   return (
     <tr>
-      <td>{name}</td>
-      <td>{surname}</td>
-      <td>{birthday}</td>
-      <td>{city}</td>
-      <td>{program}</td>
-      <td>{group}</td>
+      <td>{student.name}</td>
+      <td>{student.surname}</td>
+      <td>{student.birthday}</td>
+      <td>{student.city}</td>
+      <td>{student.program}</td>
+      <td>{student.group}</td>
       <td>
-        <button type="button">Edit</button>
+        <button
+          type="button"
+          onClick={() => {
+            editStudent(student);
+          }}
+        >
+          Edit
+        </button>
         <button type="button" onClick={handleClick}>
           Delete
         </button>

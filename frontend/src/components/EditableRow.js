@@ -1,10 +1,6 @@
 import React from "react";
 
-const EditableRow = ({
-  editFormData,
-  handleEditFormChange,
-  handleCancelClick,
-}) => {
+const EditableRow = ({ editableData, handleSavelClick, handleCancelClick }) => {
   return (
     <tr>
       <td>
@@ -13,8 +9,9 @@ const EditableRow = ({
           name="name"
           required="required"
           placeholder="Write a name"
-          value={editFormData.name}
-          onChange={handleEditFormChange}
+          value={editableData.name}
+          onChange={(e) => handleSavelClick(e.target.value)}
+          readOnly
         ></input>
       </td>
       <td>
@@ -23,8 +20,8 @@ const EditableRow = ({
           name="surname"
           required="required"
           placeholder="Write a surname"
-          value={editFormData.surname}
-          onChange={handleEditFormChange}
+          value={editableData.surname}
+          onChange={(e) => handleSavelClick(e.target.value)}
         ></input>
       </td>
       <td>
@@ -33,8 +30,8 @@ const EditableRow = ({
           name="city"
           required="required"
           placeholder="Write a city"
-          value={editFormData.city}
-          onChange={handleEditFormChange}
+          value={editableData.city}
+          onChange={(e) => handleSavelClick(e.target.value)}
         ></input>
       </td>
       <td>
@@ -43,33 +40,34 @@ const EditableRow = ({
           name="birthday"
           required="required"
           placeholder="Write a birthday"
-          value={editFormData.birthday}
-          onChange={handleEditFormChange}
+          value={editableData.birthday}
+          onChange={(e) => handleSavelClick(e.target.value)}
         ></input>
         <select
           name="program"
           required="required"
-          value={editFormData.program}
-          onChange={handleEditFormChange}
+          value={editableData.program}
+          onChange={(e) => handleSavelClick(e.target.value)}
         >
           <option value="choose">Choose</option>
           <option value="php">PHP</option>
           <option value="java">JAVA</option>
           <option value="js">JS</option>
-          <option value="py">PY</option>
         </select>
         <input
           type="text"
           name="group"
           required="required"
           placeholder="Write a group"
-          value={editFormData.group}
-          onChange={handleEditFormChange}
+          value={editableData.group}
+          onChange={(e) => handleSavelClick(e.target.value)}
         />
       </td>
       <td>
-        <button type="submit">Save</button>
-        <button type="button" onClick={handleCancelClick}>
+        <button type="submit" onClick={handleSavelClick}>
+          Save
+        </button>
+        <button type="submit" onClick={handleCancelClick}>
           Cancel
         </button>
       </td>

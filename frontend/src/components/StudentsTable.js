@@ -5,26 +5,29 @@ import StudentRow from "./StudentRow";
 function StudentsTable() {
   const [students, setStudents] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableData, setEditableData] = useState({});
 
+  //  GET METHOD
   const getStudents = async () => {
     await fetch("http://localhost:4000/api/v1/students")
       .then((response) => response.json())
       .then((result) => {
-        // console.log(result);
-        // console.log(result.data);
-        // console.log(result.data.students);
         setStudents(result.data.students);
         setIsLoading(false);
       })
       .catch((error) => console.log(error));
   };
+
   useEffect(() => {
     getStudents();
-  }, []);
+  }, [students]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  // POST METHOD
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -33,6 +36,7 @@ function StudentsTable() {
     const birthday = e.target.birthday.value;
     const program = e.target.program.value;
     const group = e.target.group.value;
+
     fetch("http://localhost:4000/api/v1/students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,22 +51,46 @@ function StudentsTable() {
     })
       .then((res) => {
         console.log(res);
+        getStudents();
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  // Cancel button fuction
+  const handleCancelClick = () => {
+    setIsEditing();
+  };
+
+  //  PUT METHOD
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    const handleSaveClick = e.target.handleSaveClick.value;
+    const name = e.target.name.value;
+    fetch("http://localhost:4000/api/v1/students", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+      }),
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(handleSaveClick);
+  };
   const studentsRow = students.map((student) => {
     return (
       <StudentRow
         key={student._id}
-        name={student.name}
-        surname={student.surname}
-        city={student.city}
-        birthday={student.birthday}
-        program={student.program}
-        group={student.group}
+        id={student._id}
+        student={student}
+        setIsEditing={setIsEditing}
+        setEditableData={setEditableData}
       />
     );
   });
@@ -108,19 +136,32 @@ function StudentsTable() {
         />
         <button type="submit">Add</button>
       </form>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Birthday</th>
-            <th>City</th>
-            <th>Program</th>
-            <th>Group</th>
-          </tr>
-        </thead>
-        <tbody>{studentsRow}</tbody>
-      </table>
+      <form>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Surname</th>
+              <th>Birthday</th>
+              <th>City</th>
+              <th>Program</th>
+              <th>Group</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Fragment>
+              {isEditing && (
+                <EditableRow
+                  editableData={editableData}
+                  handleCancelClick={handleCancelClick}
+                  handleSaveClick={handleSaveClick}
+                />
+              )}
+              {studentsRow}
+            </Fragment>
+          </tbody>
+        </table>
+      </form>
     </div>
   );
 }
