@@ -17,9 +17,12 @@ Used API to get data from database.
 Project is created with:
 
 frontend:
+
 - React.js
 - CSS
+
 backend:
+
 - Express.js
 - Node.js
 - MongoDB
