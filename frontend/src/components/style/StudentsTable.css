@@ -1,0 +1,68 @@
+.Main-container {
+  padding: 2em;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  grid-column-gap: 20px;
+}
+
+@media screen and (max-width: 45rem) {
+  .Main-container {
+    display: grid;
+    grid-row-gap: 20px;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.Main-form,
+.Main-table {
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.75);
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.Main-form {
+  padding: 1em 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.Main-form > * {
+  width: 15rem;
+}
+
+.Main-form :nth-child(17) {
+  margin: 2em 0;
+  max-width: 5rem;
+}
+
+input,
+select {
+  padding: 0.3em 0.3em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+select > * {
+  width: 50rem;
+}
+
+.Main-form-btn {
+  background-color: var(--backgroundColors-1000);
+}
+
+.Main-table {
+  padding: 2em;
+}
+
+@media screen and (max-width: 45rem) {
+  .Main-table {
+    display: grid;
+  }
+}
+
+.error {
+  font-size: 0.8rem;
+  color: var(--textColor-200);
+}

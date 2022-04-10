@@ -1,20 +1,12 @@
+// Libraries
 import React from "react";
 
-function StudentRow({ id, setIsEditing, student, setEditableData }) {
-  function editStudent(student) {
-    setEditableData(student);
-    setIsEditing(true);
-  }
-  const handleClick = () => {
-    console.log(id);
-    fetch(`http://localhost:4000/api/v1/students/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => console.log(res));
-  };
+// Style
+import "./style/StudentRow.css";
+// Icon
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+function StudentRow({ id, student, deleteStudent, editStudent }) {
   return (
     <tr>
       <td>{student.name}</td>
@@ -23,7 +15,7 @@ function StudentRow({ id, setIsEditing, student, setEditableData }) {
       <td>{student.city}</td>
       <td>{student.program}</td>
       <td>{student.group}</td>
-      <td>
+      <td className="StudentRow-btn">
         <button
           type="button"
           onClick={() => {
@@ -32,8 +24,8 @@ function StudentRow({ id, setIsEditing, student, setEditableData }) {
         >
           Edit
         </button>
-        <button type="button" onClick={handleClick}>
-          Delete
+        <button type="button" onClick={() => deleteStudent(id)}>
+          <FontAwesomeIcon icon="fa-light fa-trash" />
         </button>
       </td>
     </tr>

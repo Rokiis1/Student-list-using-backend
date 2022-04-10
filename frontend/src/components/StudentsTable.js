@@ -1,12 +1,32 @@
-import React, { useState, useEffect, Fragment } from "react";
-import EditableRow from "./EditableRow";
+// Libraries
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+// Components
 import StudentRow from "./StudentRow";
+// Style
+import "./style/StudentsTable.css";
 
 function StudentsTable() {
   const [students, setStudents] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableData, setEditableData] = useState({});
+  const [currentStudent, setCurrentStudent] = useState({});
+  let [editingId, setEditingID] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValue: {
+      name: "",
+      surname: "",
+      city: "",
+      birthday: "",
+      program: "",
+      group: "",
+    },
+  });
 
   //  GET METHOD
   const getStudents = async () => {
@@ -21,147 +41,195 @@ function StudentsTable() {
 
   useEffect(() => {
     getStudents();
-  }, [students]);
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  // POST METHOD
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const surname = e.target.surname.value;
-    const city = e.target.city.value;
-    const birthday = e.target.birthday.value;
-    const program = e.target.program.value;
-    const group = e.target.group.value;
-
-    fetch("http://localhost:4000/api/v1/students", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name,
-        surname: surname,
-        city: city,
-        birthday: birthday,
-        program: program,
-        group: group,
-      }),
-    })
-      .then((res) => {
-        console.log(res);
-        getStudents();
+  const addStudent = (data) => {
+    if (editingId) {
+      // PUT METHOD fetch
+      fetch("http://localhost:4000/api/v1/students/" + editingId, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // Cancel button fuction
-  const handleCancelClick = () => {
-    setIsEditing();
-  };
-
-  //  PUT METHOD
-  const handleSaveClick = (e) => {
-    e.preventDefault();
-    const handleSaveClick = e.target.handleSaveClick.value;
-    const name = e.target.name.value;
-    fetch("http://localhost:4000/api/v1/students", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name,
-      }),
-    })
-      .then((res) => {
-        console.log(res);
+        .then((res) => {
+          console.log(res);
+          getStudents();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      // POST METHOD
+      fetch("http://localhost:4000/api/v1/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(handleSaveClick);
+        .then((res) => {
+          console.log(res);
+          getStudents();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
+
+  //  PUT METHOD item
+  const editStudent = (data) => {
+    setEditingID(data._id);
+    setCurrentStudent(data);
+  };
+
+  // DELETE METHOD
+  const deleteStudent = (id) => {
+    fetch(`http://localhost:4000/api/v1/students/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      console.log(res);
+      getStudents();
+    });
+  };
+
+  new Date("2019-10-17T02:00:00.000Z").toLocaleDateString();
+
   const studentsRow = students.map((student) => {
     return (
       <StudentRow
         key={student._id}
         id={student._id}
         student={student}
-        setIsEditing={setIsEditing}
-        setEditableData={setEditableData}
+        deleteStudent={deleteStudent}
+        editStudent={editStudent}
       />
     );
   });
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="Main-container">
+      <form className="Main-form" onSubmit={handleSubmit(addStudent)}>
+        <label>Name</label>
         <input
-          type="text"
-          name="name"
-          required="required"
           placeholder="Write a name"
+          defaultValue={currentStudent.name}
+          {...register("name", {
+            required: "This is requires",
+            minLength: {
+              value: 3,
+              message: "Minimum lenght is 3",
+            },
+            maxLength: {
+              value: 15,
+              message: "Max lenght is 15",
+            },
+            pattern: {
+              value: /^[A-Za-z]+$/i,
+              message: "You write with number or wrong symbol",
+            },
+          })}
         />
+        <p className="error">{errors.name?.message}</p>
+        <label>Surname</label>
         <input
-          type="text"
-          name="surname"
-          required="required"
           placeholder="Write a surname"
+          defaultValue={currentStudent.surname}
+          {...register("surname", {
+            required: "This is requires",
+            minLength: {
+              value: 3,
+              message: "Minimum lenght is 3",
+            },
+            maxLength: {
+              value: 20,
+              message: "Max lenght is 20",
+            },
+            pattern: {
+              value: /^[A-Za-z]+$/i,
+              message: "You write with number or wrong symbol",
+            },
+          })}
         />
+        <p className="error">{errors.surname?.message}</p>
+
+        <label>City</label>
         <input
-          type="text"
-          name="city"
-          required="required"
           placeholder="Write a city"
+          defaultValue={currentStudent.city}
+          {...register("city", {
+            required: "This is requires",
+            minLength: {
+              value: 3,
+              message: "Minimum lenght is 3",
+            },
+            maxLength: {
+              value: 20,
+              message: "Max lenght is 20",
+            },
+            pattern: {
+              value: /^[A-Za-z]+$/i,
+              message: "You write with number or wrong symbol",
+            },
+          })}
         />
+        <p className="error">{errors.city?.message}</p>
+
+        <label>Birthday</label>
         <input
           type="date"
-          name="birthday"
-          required="required"
-          placeholder="Write a birthday"
+          {...register("birthday", {
+            required: "This is requires",
+            value: "",
+          })}
         />
-        <select name="program" required="required">
-          <option value="choose">Choose</option>
-          <option value="php">PHP</option>
-          <option value="java">JAVA</option>
-          <option value="js">JS</option>
-          <option value="py">PY</option>
+        <p className="error">{errors.birthday?.message}</p>
+        <label>Program</label>
+        <select {...register("program")}>
+          <option value="Select">Select</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="Java">Java</option>
+          <option value="PHP">PHP</option>
+          <option value="Python">Python</option>
         </select>
-        <input
-          type="text"
-          name="group"
-          required="required"
-          placeholder="Write a group"
-        />
-        <button type="submit">Add</button>
+
+        <label>Group</label>
+        <select
+          {...register("group", {
+            required: true,
+          })}
+        >
+          <option value="Select">Select</option>
+          <option value="JS-22">JS-22</option>
+          <option value="JAVA-22">JAVA-22</option>
+          <option value="PHP-22">PHP-22</option>
+          <option value="PY-22">PY-22</option>
+        </select>
+
+        <button className="Main-form-btn" type="submit">
+          Added
+        </button>
       </form>
-      <form>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Surname</th>
-              <th>Birthday</th>
-              <th>City</th>
-              <th>Program</th>
-              <th>Group</th>
-            </tr>
-          </thead>
-          <tbody>
-            <Fragment>
-              {isEditing && (
-                <EditableRow
-                  editableData={editableData}
-                  handleCancelClick={handleCancelClick}
-                  handleSaveClick={handleSaveClick}
-                />
-              )}
-              {studentsRow}
-            </Fragment>
-          </tbody>
-        </table>
-      </form>
+
+      <table className="Main-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Birthday</th>
+            <th>City</th>
+            <th>Program</th>
+            <th>Group</th>
+            <th>Option</th>
+          </tr>
+        </thead>
+        <tbody>{studentsRow}</tbody>
+      </table>
     </div>
   );
 }

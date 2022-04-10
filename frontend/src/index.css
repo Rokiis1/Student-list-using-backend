@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* ::after,
+* ::before {
+  box-sizing: border-box;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+}
+
+:root {
+  /* Backgorund colors */
+  --backgroundColors-1000: #77a7e2;
+  --backgroundColors-500: #9abb7a;
+  --backgroundColor-100: #cb4650;
+  /* Text colors */
+  --textColor-200: red;
+  /* Netural colors */
+  --neutral-color: white;
+}
+
+button {
+  color: var(--neutral-color);
+  border: none;
+  padding: 0.5em 0.6em;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}

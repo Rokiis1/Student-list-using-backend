@@ -36,21 +36,21 @@ const studentsSchema = new mongoose.Schema({
 const Students = new mongoose.model("Students", studentsSchema);
 
 // Duomenų siuntimas į DB
-run();
-async function run() {
-  try {
-    const testStudents = new Students({
-      name: "Xi hu lo",
-      surname: "Ademolo",
-      birthdate: "2001-11-24",
-      program: "JavaScript",
-      city: "New York",
-      group: "JS-2",
-    });
-    await testStudents.save();
-  } catch (e) {
-    console.log(e.message);
-  }
-}
+// run();
+// async function run() {
+//   try {
+//     const testStudents = new Students({
+//       name: "Xi hu lo",
+//       surname: "Ademolo",
+//       birthdate: "2001-11-24",
+//       program: "JavaScript",
+//       city: "New York",
+//       group: "JS-2",
+//     });
+//     await testStudents.save();
+//   } catch (e) {
+//     console.log(e.message);
+//   }
+// }
 
 module.exports = Students;
