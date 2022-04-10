@@ -39,8 +39,6 @@ Tools to help create a project:
 
 For testing I used Postman to found a errors.
 
-![Screenshot](https://drive.google.com/file/d/1y9gKvZQOv1HkqC0A9c9DprHrsWH2H7wf/view)
-
 ## How to use Docker on project
 
 1. Clone repository in computer.
