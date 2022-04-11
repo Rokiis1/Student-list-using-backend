@@ -39,7 +39,7 @@ Tools to help create a project:
 
 ## Testing
 
-For testing I used Postman to found a errors.
+I used Postman to test API.
 
 ## How to use Docker on project
 
