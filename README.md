@@ -10,7 +10,7 @@
 ## General info
 
 Created an application that consists of a frontend and a merged backend.
-Used API to get data from database.
+Used data from database.
 
 ## Technologies
 
@@ -35,6 +35,7 @@ Tools to help create a project:
 - Powershell
 - Docker
 - Mongoose
+- Rest API
 
 ## Testing
 
