@@ -1,7 +1,6 @@
 // Libraries
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-
 // Components
 import StudentRow from "./StudentRow";
 // Style
@@ -11,7 +10,7 @@ function StudentsTable() {
   const [students, setStudents] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [currentStudent, setCurrentStudent] = useState({});
-  let [editingId, setEditingID] = useState("");
+  const [editingId, setEditingID] = useState("");
 
   const {
     register,
@@ -40,6 +39,7 @@ function StudentsTable() {
   };
 
   useEffect(() => {
+    // Auto reaload
     getStudents();
   }, []);
 
@@ -57,6 +57,7 @@ function StudentsTable() {
       })
         .then((res) => {
           console.log(res);
+          // Auto reaload
           getStudents();
         })
         .catch((err) => {
@@ -71,6 +72,7 @@ function StudentsTable() {
       })
         .then((res) => {
           console.log(res);
+          // Auto reaload
           getStudents();
         })
         .catch((err) => {
@@ -82,6 +84,7 @@ function StudentsTable() {
   //  PUT METHOD item
   const editStudent = (data) => {
     setEditingID(data._id);
+    // update date in the inputs
     setCurrentStudent(data);
   };
 
@@ -94,11 +97,10 @@ function StudentsTable() {
       },
     }).then((res) => {
       console.log(res);
+      // Auto reaload
       getStudents();
     });
   };
-
-  new Date("2019-10-17T02:00:00.000Z").toLocaleDateString();
 
   const studentsRow = students.map((student) => {
     return (
@@ -106,6 +108,7 @@ function StudentsTable() {
         key={student._id}
         id={student._id}
         student={student}
+        // Values send
         deleteStudent={deleteStudent}
         editStudent={editStudent}
       />
@@ -185,32 +188,36 @@ function StudentsTable() {
           type="date"
           {...register("birthday", {
             required: "This is requires",
-            value: "",
+            valueAsDate: true,
           })}
         />
         <p className="error">{errors.birthday?.message}</p>
         <label>Program</label>
-        <select {...register("program")}>
-          <option value="Select">Select</option>
+        <select
+          {...register("program", {
+            required: "This is requires",
+          })}
+        >
+          <option value="">Select</option>
           <option value="JavaScript">JavaScript</option>
           <option value="Java">Java</option>
           <option value="PHP">PHP</option>
           <option value="Python">Python</option>
         </select>
-
+        <p className="error">{errors.program?.message}</p>
         <label>Group</label>
         <select
           {...register("group", {
-            required: true,
+            required: "This is requires",
           })}
         >
-          <option value="Select">Select</option>
+          <option value="">Select</option>
           <option value="JS-22">JS-22</option>
           <option value="JAVA-22">JAVA-22</option>
           <option value="PHP-22">PHP-22</option>
           <option value="PY-22">PY-22</option>
         </select>
-
+        <p className="error">{errors.group?.message}</p>
         <button className="Main-form-btn" type="submit">
           Added
         </button>
@@ -228,7 +235,7 @@ function StudentsTable() {
             <th>Option</th>
           </tr>
         </thead>
-        <tbody>{studentsRow}</tbody>
+        <tbody className="Main-table-tbody">{studentsRow}</tbody>
       </table>
     </div>
   );

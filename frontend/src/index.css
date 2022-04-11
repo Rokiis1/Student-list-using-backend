@@ -25,6 +25,11 @@ button {
   color: var(--neutral-color);
   border: none;
   padding: 0.5em 0.6em;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.3s ease 0s;
+}
+
+button:hover {
+  filter: brightness(0.5);
 }

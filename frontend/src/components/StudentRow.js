@@ -3,15 +3,15 @@ import React from "react";
 
 // Style
 import "./style/StudentRow.css";
-// Icon
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function StudentRow({ id, student, deleteStudent, editStudent }) {
+  const birthday = student.birthday.toString().substr(0, 10);
+
   return (
-    <tr>
+    <tr className="StudentRow-container">
       <td>{student.name}</td>
       <td>{student.surname}</td>
-      <td>{student.birthday}</td>
+      <td>{birthday}</td>
       <td>{student.city}</td>
       <td>{student.program}</td>
       <td>{student.group}</td>
@@ -25,7 +25,7 @@ function StudentRow({ id, student, deleteStudent, editStudent }) {
           Edit
         </button>
         <button type="button" onClick={() => deleteStudent(id)}>
-          <FontAwesomeIcon icon="fa-light fa-trash" />
+          Delete
         </button>
       </td>
     </tr>
